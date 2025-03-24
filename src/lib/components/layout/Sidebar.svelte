@@ -363,7 +363,7 @@
 			}
 		});
 
-		showSidebar.set(!$mobile ? localStorage.sidebar === 'true' : false);
+		showSidebar.set(!$mobile ? true : false);
 		showSidebar.subscribe((value) => {
 			localStorage.sidebar = value;
 
