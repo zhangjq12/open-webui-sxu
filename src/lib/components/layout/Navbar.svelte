@@ -27,6 +27,7 @@
 	import { stringify } from 'postcss';
 	import PencilSquare from '../icons/PencilSquare.svelte';
 	import Plus from '../icons/Plus.svelte';
+	import { getIsIframe } from '../../utils/isIframe';
 
 	const i18n = getContext('i18n');
 
@@ -164,7 +165,7 @@
 					</button>
 				</Tooltip>
 
-				{#if $user !== undefined}
+				{#if $user !== undefined && !getIsIframe()}
 					<UserMenu
 						className="max-w-[200px]"
 						role={$user.role}

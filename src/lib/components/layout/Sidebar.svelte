@@ -58,6 +58,7 @@
 	import ChannelItem from './Sidebar/ChannelItem.svelte';
 	import PencilSquare from '../icons/PencilSquare.svelte';
 	import Home from '../icons/Home.svelte';
+	import { getIsIframe } from '../../utils/isIframe';
 
 	const BREAKPOINT = 768;
 
@@ -883,7 +884,7 @@
 
 		<div class="px-2">
 			<div class="flex flex-col font-primary">
-				{#if $user !== undefined}
+				{#if $user !== undefined && !getIsIframe()}
 					<UserMenu
 						role={$user.role}
 						on:show={(e) => {

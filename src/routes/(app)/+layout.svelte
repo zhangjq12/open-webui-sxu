@@ -45,6 +45,7 @@
 	import ChangelogModal from '$lib/components/ChangelogModal.svelte';
 	import AccountPending from '$lib/components/layout/Overlay/AccountPending.svelte';
 	import UpdateInfoToast from '$lib/components/layout/UpdateInfoToast.svelte';
+	import { setIsIframe } from '../../lib/utils/isIframe';
 
 	const i18n = getContext('i18n');
 
@@ -114,6 +115,7 @@
 
 		const messageListener = (e: any) => {
 			handleAccountFromParent(e.data);
+			setIsIframe(true);
 		};
 
 		window.addEventListener('message', messageListener);
