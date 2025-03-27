@@ -32,7 +32,7 @@
 	import { Toaster, toast } from 'svelte-sonner';
 
 	import { getBackendConfig } from '$lib/apis';
-	import { getSessionUser } from '$lib/apis/auths';
+	import { getSessionUser, userSignIn, userSignUp } from '$lib/apis/auths';
 
 	import '../tailwind.css';
 	import '../app.css';
@@ -41,11 +41,12 @@
 
 	import { WEBUI_BASE_URL, WEBUI_HOSTNAME } from '$lib/constants';
 	import i18n, { initI18n, getLanguages, changeLanguage } from '$lib/i18n';
-	import { bestMatchingLanguage } from '$lib/utils';
+	import { bestMatchingLanguage, generateInitialsImage } from '$lib/utils';
 	import { getAllTags, getChatList } from '$lib/apis/chats';
 	import NotificationToast from '$lib/components/NotificationToast.svelte';
 	import AppSidebar from '$lib/components/app/AppSidebar.svelte';
 	import { chatCompletion } from '$lib/apis/openai';
+	import { setIsIframe } from '$lib/utils/isIframe';
 
 	setContext('i18n', i18n);
 
@@ -396,6 +397,11 @@
 	};
 
 	onMount(async () => {
+		if (localStorage.getItem('isIframe')) {
+			setIsIframe(true);
+			localStorage.removeItem('isIframe');
+		}
+
 		if (typeof window !== 'undefined' && window.applyTheme) {
 			window.applyTheme();
 		}
@@ -488,6 +494,75 @@
 			changeLanguage(lang);
 		}
 
+		// const handleAccountFromParent = (data) => {
+		// 	const querystringValue = (key) => {
+		// 		const querystring = window.location.search;
+		// 		const urlParams = new URLSearchParams(querystring);
+		// 		return urlParams.get(key);
+		// 	};
+		// 	const setSessionUser = async (sessionUser) => {
+		// 		if (sessionUser) {
+		// 			console.log(sessionUser);
+		// 			if (sessionUser.token) {
+		// 				localStorage.token = sessionUser.token;
+		// 			}
+
+		// 			$socket.emit('user-join', { auth: { token: sessionUser.token } });
+		// 			await user.set(sessionUser);
+		// 			await config.set(await getBackendConfig());
+
+		// 			const redirectPath = querystringValue('redirect') || '/';
+		// 			goto(redirectPath);
+		// 		}
+		// 	};
+
+		// 	const signInHandler = async (email, password) => {
+		// 		try {
+		// 			const sessionUser = await userSignIn(email, password);
+
+		// 			await setSessionUser(sessionUser);
+		// 		} catch (e) {
+		// 			return false;
+		// 		}
+		// 	};
+
+		// 	const signUpHandler = async (name, email, password) => {
+		// 		const sessionUser = await userSignUp(
+		// 			name,
+		// 			email,
+		// 			password,
+		// 			generateInitialsImage(name)
+		// 		).catch((error) => {
+		// 			toast.error(`${error}`);
+		// 			return null;
+		// 		});
+
+		// 		await setSessionUser(sessionUser);
+		// 	};
+
+		// 	const name = data.name;
+		// 	const email = data.email;
+		// 	const password = data.password;
+
+		// 	try {
+		// 		signInHandler(email, password);
+		// 	} catch (e) {
+		// 		signUpHandler(name, email, password);
+		// 	}
+		// };
+
+		// const messageListener = (e) => {
+		// 	console.log(e);
+		// 	handleAccountFromParent(e.data);
+		// 	setIsIframe(true);
+		// };
+
+		// window.onmessage = messageListener;
+		// window.addEventListener('message', (e) => {
+		// 	console.log(e);
+		// 	messageListener(e);
+		// });
+
 		if (backendConfig) {
 			// Save Backend Status to Store
 			await config.set(backendConfig);
@@ -515,10 +590,39 @@
 						await goto('/auth');
 					}
 				} else {
-					// Don't redirect if we're already on the auth page
-					// Needed because we pass in tokens from OAuth logins via URL fragments
-					if ($page.url.pathname !== '/auth') {
-						await goto('/auth');
+					const data = localStorage.getItem('iframeUser');
+					if (data) {
+						const dataJson = JSON.parse(data);
+						const name = dataJson.name;
+						const email = dataJson.email;
+						const password = dataJson.password;
+
+						let err;
+						let sessionUser;
+						try {
+							sessionUser = await userSignUp(name, email, password, generateInitialsImage(name));
+						} catch (e) {
+							sessionUser = await userSignIn(email, password).catch((error) => {
+								err = error;
+								return null;
+							});
+						}
+
+						if (!err) {
+							if (sessionUser.token) {
+								localStorage.token = sessionUser.token;
+							}
+
+							$socket.emit('user-join', { auth: { token: sessionUser.token } });
+							await user.set(sessionUser);
+							await config.set(await getBackendConfig());
+						}
+					} else {
+						// Don't redirect if we're already on the auth page
+						// Needed because we pass in tokens from OAuth logins via URL fragments
+						if ($page.url.pathname !== '/auth') {
+							await goto('/auth');
+						}
 					}
 				}
 			}

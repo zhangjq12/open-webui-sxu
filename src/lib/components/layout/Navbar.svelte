@@ -165,7 +165,7 @@
 					</button>
 				</Tooltip>
 
-				{#if $user !== undefined && !getIsIframe()}
+				{#if $user !== undefined}
 					<UserMenu
 						className="max-w-[200px]"
 						role={$user.role}

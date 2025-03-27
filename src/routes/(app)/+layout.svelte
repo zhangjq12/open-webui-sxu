@@ -27,7 +27,6 @@
 		config,
 		user,
 		settings,
-		socket,
 		models,
 		prompts,
 		knowledge,
@@ -56,70 +55,6 @@
 	let version;
 
 	onMount(async () => {
-		const handleAccountFromParent = (data: any) => {
-			const querystringValue = (key: any) => {
-				const querystring = window.location.search;
-				const urlParams = new URLSearchParams(querystring);
-				return urlParams.get(key);
-			};
-			const setSessionUser = async (sessionUser: any) => {
-				if (sessionUser) {
-					console.log(sessionUser);
-					if (sessionUser.token) {
-						localStorage.token = sessionUser.token;
-					}
-
-					$socket.emit('user-join', { auth: { token: sessionUser.token } });
-					await user.set(sessionUser);
-					await config.set(await getBackendConfig());
-
-					const redirectPath = querystringValue('redirect') || '/';
-					goto(redirectPath);
-				}
-			};
-
-			const signInHandler = async (email: any, password: any) => {
-				try {
-					const sessionUser = await userSignIn(email, password);
-
-					await setSessionUser(sessionUser);
-				} catch (e) {
-					return false;
-				}
-			};
-
-			const signUpHandler = async (name: any , email: any, password: any) => {
-				const sessionUser = await userSignUp(
-					name,
-					email,
-					password,
-					generateInitialsImage(name)
-				).catch((error: any) => {
-					toast.error(`${error}`);
-					return null;
-				});
-
-				await setSessionUser(sessionUser);
-			};
-
-			const name = data.name;
-			const email = data.email;
-			const password = data.password;
-
-			try {
-				signInHandler(email, password);
-			} catch (e) {
-				signUpHandler(name, email, password);
-			}
-		};
-
-		const messageListener = (e: any) => {
-			handleAccountFromParent(e.data);
-			setIsIframe(true);
-		};
-
-		window.addEventListener('message', messageListener);
-
 		if ($user === undefined) {
 			await goto('/auth');
 		} else if (['user', 'admin'].includes($user.role)) {
@@ -276,10 +211,6 @@
 		}
 
 		loaded = true;
-
-		return () => {
-			window.removeEventListener('message', messageListener);
-		};
 	});
 
 	const checkForVersionUpdates = async () => {

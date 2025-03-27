@@ -5,5 +5,6 @@ export const setIsIframe = (boo: boolean) => {
 }
 
 export const getIsIframe = () => {
+    console.log(isIframe)
     return isIframe;
 }
