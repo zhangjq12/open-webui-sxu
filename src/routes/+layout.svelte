@@ -617,6 +617,8 @@
 							await user.set(sessionUser);
 							await config.set(await getBackendConfig());
 						}
+
+						localStorage.removeItem('iframeUser');
 					} else {
 						// Don't redirect if we're already on the auth page
 						// Needed because we pass in tokens from OAuth logins via URL fragments
