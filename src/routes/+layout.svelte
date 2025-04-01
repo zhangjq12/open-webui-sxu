@@ -46,7 +46,7 @@
 	import NotificationToast from '$lib/components/NotificationToast.svelte';
 	import AppSidebar from '$lib/components/app/AppSidebar.svelte';
 	import { chatCompletion } from '$lib/apis/openai';
-	import { setIsIframe } from '$lib/utils/isIframe';
+	import { getIsIframe, setIsIframe } from '$lib/utils/isIframe';
 
 	setContext('i18n', i18n);
 
@@ -571,7 +571,36 @@
 			if ($config) {
 				await setupSocket($config.features?.enable_websocket ?? true);
 
-				if (localStorage.token) {
+				const data = localStorage.getItem('iframeUser');
+				if (getIsIframe() && data) {
+					const dataJson = JSON.parse(data);
+					const name = dataJson.name;
+					const email = dataJson.email;
+					const password = dataJson.password;
+
+					let err;
+					let sessionUser;
+					try {
+						sessionUser = await userSignUp(name, email, password, generateInitialsImage(name));
+					} catch (e) {
+						sessionUser = await userSignIn(email, password).catch((error) => {
+							err = error;
+							return null;
+						});
+					}
+
+					if (!err) {
+						if (sessionUser.token) {
+							localStorage.token = sessionUser.token;
+						}
+
+						$socket.emit('user-join', { auth: { token: sessionUser.token } });
+						await user.set(sessionUser);
+						await config.set(await getBackendConfig());
+					}
+
+					localStorage.removeItem('iframeUser');
+				} else if (localStorage.token) {
 					// Get Session User Info
 					const sessionUser = await getSessionUser(localStorage.token).catch((error) => {
 						toast.error(`${error}`);
@@ -590,41 +619,10 @@
 						await goto('/auth');
 					}
 				} else {
-					const data = localStorage.getItem('iframeUser');
-					if (data) {
-						const dataJson = JSON.parse(data);
-						const name = dataJson.name;
-						const email = dataJson.email;
-						const password = dataJson.password;
-
-						let err;
-						let sessionUser;
-						try {
-							sessionUser = await userSignUp(name, email, password, generateInitialsImage(name));
-						} catch (e) {
-							sessionUser = await userSignIn(email, password).catch((error) => {
-								err = error;
-								return null;
-							});
-						}
-
-						if (!err) {
-							if (sessionUser.token) {
-								localStorage.token = sessionUser.token;
-							}
-
-							$socket.emit('user-join', { auth: { token: sessionUser.token } });
-							await user.set(sessionUser);
-							await config.set(await getBackendConfig());
-						}
-
-						localStorage.removeItem('iframeUser');
-					} else {
-						// Don't redirect if we're already on the auth page
-						// Needed because we pass in tokens from OAuth logins via URL fragments
-						if ($page.url.pathname !== '/auth') {
-							await goto('/auth');
-						}
+					// Don't redirect if we're already on the auth page
+					// Needed because we pass in tokens from OAuth logins via URL fragments
+					if ($page.url.pathname !== '/auth') {
+						await goto('/auth');
 					}
 				}
 			}

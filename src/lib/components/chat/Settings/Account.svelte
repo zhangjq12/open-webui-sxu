@@ -12,6 +12,7 @@
 	import Plus from '$lib/components/icons/Plus.svelte';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import SensitiveInput from '$lib/components/common/SensitiveInput.svelte';
+	import { getIsIframe } from '$lib/utils/isIframe';
 
 	const i18n = getContext('i18n');
 
@@ -262,9 +263,11 @@
 			</div>
 		</div>
 
-		<div class="py-0.5">
-			<UpdatePassword />
-		</div>
+		{#if !getIsIframe()}
+			<div class="py-0.5">
+				<UpdatePassword />
+			</div>
+		{/if}
 
 		<hr class="border-gray-100 dark:border-gray-850 my-4" />
 
