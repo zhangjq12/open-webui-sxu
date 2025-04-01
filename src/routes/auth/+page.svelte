@@ -319,7 +319,7 @@
 													: $i18n.t('Create Account')}
 										</button>
 
-										{#if $config?.features.enable_signup && !($config?.onboarding ?? false)}
+										<!-- {#if $config?.features.enable_signup && !($config?.onboarding ?? false)}
 											<div class=" mt-4 text-sm text-center">
 												{mode === 'signin'
 													? $i18n.t("Don't have an account?")
@@ -339,7 +339,7 @@
 													{mode === 'signin' ? $i18n.t('Sign up') : $i18n.t('Sign in')}
 												</button>
 											</div>
-										{/if}
+										{/if} -->
 									{/if}
 								{/if}
 							</div>
