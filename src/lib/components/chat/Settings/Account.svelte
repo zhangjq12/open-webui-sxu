@@ -263,11 +263,11 @@
 			</div>
 		</div>
 
-		{#if !getIsIframe()}
+		<!-- {#if !getIsIframe()}
 			<div class="py-0.5">
 				<UpdatePassword />
 			</div>
-		{/if}
+		{/if} -->
 
 		<hr class="border-gray-100 dark:border-gray-850 my-4" />
 
