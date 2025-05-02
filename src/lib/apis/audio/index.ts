@@ -69,7 +69,8 @@ export const transcribeAudio = async (token: string, file: File) => {
 	data.append('file', file);
 
 	let error = null;
-	const res = await fetch(`${AUDIO_API_BASE_URL}/transcriptions`, {
+	// const res = await fetch(`${AUDIO_API_BASE_URL}/transcriptions`, {
+	const res = await fetch(`https://api.xi-ai.cn/v1/audio/transcriptions`, {
 		method: 'POST',
 		headers: {
 			Accept: 'application/json',
@@ -102,7 +103,8 @@ export const synthesizeOpenAISpeech = async (
 ) => {
 	let error = null;
 
-	const res = await fetch(`${AUDIO_API_BASE_URL}/speech`, {
+	// const res = await fetch(`${AUDIO_API_BASE_URL}/speech`, {
+	const res = await fetch(`https://api.xi-ai.cn/v1/audio/speech`, {
 		method: 'POST',
 		headers: {
 			Authorization: `Bearer ${token}`,
@@ -139,7 +141,8 @@ interface AvailableModelsResponse {
 export const getModels = async (token: string = ''): Promise<AvailableModelsResponse> => {
 	let error = null;
 
-	const res = await fetch(`${AUDIO_API_BASE_URL}/models`, {
+	// const res = await fetch(`${AUDIO_API_BASE_URL}/models`, {
+	const res = await fetch(`https://api.xi-ai.cn/v1/audio/models`, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
@@ -167,7 +170,8 @@ export const getModels = async (token: string = ''): Promise<AvailableModelsResp
 export const getVoices = async (token: string = '') => {
 	let error = null;
 
-	const res = await fetch(`${AUDIO_API_BASE_URL}/voices`, {
+	// const res = await fetch(`${AUDIO_API_BASE_URL}/voices`, {
+	const res = await fetch(`https://api.xi-ai.cn/v1/audio/voices`, {
 		method: 'GET',
 		headers: {
 			'Content-Type': 'application/json',
