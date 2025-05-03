@@ -73,14 +73,11 @@ export const transcribeAudio = async (token: string, file: File) => {
 
 	let error = null;
 	// const res = await fetch(`${AUDIO_API_BASE_URL}/transcriptions`, {
-	// const res = await fetch("https://ai.sxu.edu.cn:3300/v1/audio/transcriptions", {
 	const res = await fetch("https://ai.sxu.edu.cn:3700/v1/audio/transcriptions", {
 		method: 'POST',
 		headers: {
 			Accept: 'application/json',
-			// Accept: '*/*',
 			authorization: `Bearer ${token}`,
-			// 'Content-Type': 'multipart/form-data'
 		},
 		body: data
 	})
