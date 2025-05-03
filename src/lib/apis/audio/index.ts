@@ -74,8 +74,8 @@ export const transcribeAudio = async (token: string, file: File) => {
 		method: 'POST',
 		headers: {
 			Accept: 'application/json',
-			authorization: `Bearer ${token}`
-			// authorization: `Bearer sk-lLuJJI5hj0Okpe13596843E888A84145909c97A82a2fB5E0`
+			// authorization: `Bearer ${token}`
+			authorization: `Bearer sk-YQGbgfuNj0YgZdv4zEvoGVcBM4XYnlW3LqEVtf37B4379d0g`
 		},
 		body: data
 	})
@@ -108,8 +108,8 @@ export const synthesizeOpenAISpeech = async (
 	const res = await fetch(`https://ai.sxu.edu.cn:3300/v1/audio/speech`, {
 		method: 'POST',
 		headers: {
-			Authorization: `Bearer ${token}`,
-			// Authorization: `Bearer sk-lLuJJI5hj0Okpe13596843E888A84145909c97A82a2fB5E0`,
+			// Authorization: `Bearer ${token}`,
+			Authorization: `Bearer sk-YQGbgfuNj0YgZdv4zEvoGVcBM4XYnlW3LqEVtf37B4379d0g`,
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify({
