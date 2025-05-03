@@ -67,8 +67,7 @@ export const updateAudioConfig = async (token: string, payload: OpenAIConfigForm
 export const transcribeAudio = async (token: string, file: File) => {
 	const data = new FormData();
 	data.append('file', file);
-	// data.append('model', 'whisper-1');
-	data.append('model', 'SenseVoiceSmall');
+	data.append('model', 'whisper-1');
 	token = 'sk-YQGbgfuNj0YgZdv4zEvoGVcBM4XYnlW3LqEVtf37B4379d0g';
 
 	let error = null;
