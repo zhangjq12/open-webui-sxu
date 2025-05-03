@@ -78,7 +78,8 @@ export const transcribeAudio = async (token: string, file: File) => {
 		headers: {
 			Accept: 'application/json',
 			// authorization: `Bearer ${token}`
-			authorization: `Bearer sk-YQGbgfuNj0YgZdv4zEvoGVcBM4XYnlW3LqEVtf37B4379d0g`
+			authorization: `Bearer sk-YQGbgfuNj0YgZdv4zEvoGVcBM4XYnlW3LqEVtf37B4379d0g`,
+			'Content-Type': 'multipart/form-data'
 		},
 		body: data
 	})
