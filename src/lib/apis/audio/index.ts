@@ -67,7 +67,6 @@ export const updateAudioConfig = async (token: string, payload: OpenAIConfigForm
 export const transcribeAudio = async (token: string, file: File) => {
 	const data = new FormData();
 	data.append('file', file);
-	// data.append('model', 'SenseVoiceSmall');
 	data.append('model', 'whisper-1');
 	token = 'sk-YQGbgfuNj0YgZdv4zEvoGVcBM4XYnlW3LqEVtf37B4379d0g';
 
@@ -76,8 +75,8 @@ export const transcribeAudio = async (token: string, file: File) => {
 	const res = await fetch("https://ai.sxu.edu.cn:3300/v1/audio/transcriptions", {
 		method: 'POST',
 		headers: {
-			// Accept: 'application/json',
-			Accept: '*/*',
+			Accept: 'application/json',
+			// Accept: '*/*',
 			authorization: `Bearer ${token}`,
 			// 'Content-Type': 'multipart/form-data'
 		},
@@ -109,7 +108,7 @@ export const synthesizeOpenAISpeech = async (
 
 	token = 'sk-YQGbgfuNj0YgZdv4zEvoGVcBM4XYnlW3LqEVtf37B4379d0g';
 	speaker = '中文女';
-	model = 'CosyVoice2-0.5B';
+	model = 'tts-1';
 
 	let error = null;
 
