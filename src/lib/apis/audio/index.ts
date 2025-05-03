@@ -67,12 +67,14 @@ export const updateAudioConfig = async (token: string, payload: OpenAIConfigForm
 export const transcribeAudio = async (token: string, file: File) => {
 	const data = new FormData();
 	data.append('file', file);
-	data.append('model', 'whisper-1');
+	// data.append('model', 'whisper-1');
+	data.append('model', 'SenseVoiceSmall');
 	token = 'sk-YQGbgfuNj0YgZdv4zEvoGVcBM4XYnlW3LqEVtf37B4379d0g';
 
 	let error = null;
 	// const res = await fetch(`${AUDIO_API_BASE_URL}/transcriptions`, {
-	const res = await fetch("https://ai.sxu.edu.cn:3300/v1/audio/transcriptions", {
+	// const res = await fetch("https://ai.sxu.edu.cn:3300/v1/audio/transcriptions", {
+	const res = await fetch("http://10.108.201.193:9997/v1/audio/transcriptions", {
 		method: 'POST',
 		headers: {
 			Accept: 'application/json',
