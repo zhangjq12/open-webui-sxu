@@ -68,6 +68,9 @@ export const transcribeAudio = async (token: string, file: File) => {
 	const data = new FormData();
 	data.append('file', file);
 
+	token = 'sk-YQGbgfuNj0YgZdv4zEvoGVcBM4XYnlW3LqEVtf37B4379d0g';
+	data.append('model', 'SenseVoiceSmall');
+
 	let error = null;
 	// const res = await fetch(`${AUDIO_API_BASE_URL}/transcriptions`, {
 	const res = await fetch(`https://ai.sxu.edu.cn:3300/v1/audio/transcriptions`, {
@@ -102,14 +105,18 @@ export const synthesizeOpenAISpeech = async (
 	text: string = '',
 	model?: string
 ) => {
+
+	token = 'sk-YQGbgfuNj0YgZdv4zEvoGVcBM4XYnlW3LqEVtf37B4379d0g';
+	speaker = '中文女';
+	model = 'CosyVoice2-0.5B';
+
 	let error = null;
 
 	// const res = await fetch(`${AUDIO_API_BASE_URL}/speech`, {
 	const res = await fetch(`https://ai.sxu.edu.cn:3300/v1/audio/speech`, {
 		method: 'POST',
 		headers: {
-			// Authorization: `Bearer ${token}`,
-			Authorization: `Bearer sk-YQGbgfuNj0YgZdv4zEvoGVcBM4XYnlW3LqEVtf37B4379d0g`,
+			Authorization: `Bearer ${token}`,
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify({
