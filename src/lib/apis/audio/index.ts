@@ -105,6 +105,7 @@ export const synthesizeOpenAISpeech = async (
 ) => {
 
 	token = 'sk-YQGbgfuNj0YgZdv4zEvoGVcBM4XYnlW3LqEVtf37B4379d0g';
+	model = 'tts-1';
 
 	let error = null;
 
