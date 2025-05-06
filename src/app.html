@@ -39,6 +39,31 @@
 					localStorage.setItem('isIframe', 'true');
 				}
 
+				const iframeQueries = window.location.search.split('?')[1].split('&');
+				const iframeData = {};
+				for (let idx = 0; idx < iframeQueries.length; i++) {
+					const v = iframeQueries[idx]
+					const [key, value] = v.split('=');
+					switch(key) {
+						case 'name':
+							data.name = value;
+							break;
+						case 'email':
+							data.email = value;
+							break;
+						case 'password':
+							data.password = value;
+							break;
+						case 'iframe':
+							if (value === 'true') localStorage.setItem('isIframe', value)
+							break;
+						default:
+							break;
+					}
+				}
+				localStorage.setItem('iframeUser', JSON.stringify(iframeData));
+
+
 				const metaThemeColorTag = document.querySelector('meta[name="theme-color"]');
 				const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
