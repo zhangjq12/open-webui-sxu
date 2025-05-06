@@ -46,13 +46,13 @@
 					const [key, value] = v.split('=');
 					switch(key) {
 						case 'name':
-							data.name = value;
+							iframeData.name = value;
 							break;
 						case 'email':
-							data.email = value;
+							iframeData.email = value;
 							break;
 						case 'password':
-							data.password = value;
+							iframeData.password = value;
 							break;
 						case 'iframe':
 							if (value === 'true') localStorage.setItem('isIframe', value)
