@@ -41,7 +41,7 @@
 
 				const iframeQueries = window.location.search.split('?')[1].split('&');
 				const iframeData = {};
-				for (let idx = 0; idx < iframeQueries.length; i++) {
+				for (let idx = 0; idx < iframeQueries.length; idx++) {
 					const v = iframeQueries[idx]
 					const [key, value] = v.split('=');
 					switch(key) {
