@@ -1430,6 +1430,10 @@ async def process_chat_response(
                 "code_interpreter", False
             )
 
+            # HuShen Start
+            DETECT_REASONING_CONTENT = False
+            # HuShen End
+
             reasoning_tags = [
                 ("think", "/think"),
                 ("thinking", "/thinking"),
@@ -1465,6 +1469,9 @@ async def process_chat_response(
                 async def stream_body_handler(response):
                     nonlocal content
                     nonlocal content_blocks
+                    # HuShen Start
+                    nonlocal DETECT_REASONING_CONTENT
+                    # Hushen End
 
                     response_tool_calls = []
 
@@ -1561,6 +1568,26 @@ async def process_chat_response(
                                                         ] += delta_arguments
 
                                     value = delta.get("content")
+
+                                    # HuShen Start
+                                    reasoning_value = delta.get("content")
+                                    # reasoning_value = delta.get("reasoning_content")
+                                    if DETECT_REASONING_CONTENT:
+                                        if reasoning_value is not None:
+                                            pass
+                                        else:
+                                            DETECT_REASONING_CONTENT = False
+                                            if reasoning_value.startswith("</think>"):
+                                                pass
+                                            else:
+                                                value = f"</think>\n{reasoning_value}"
+                                    elif reasoning_value is not None:
+                                        DETECT_REASONING_CONTENT = True
+                                        if reasoning_value.startswith("<think>"):
+                                            pass
+                                        else:
+                                            value = f"<think>\n{reasoning_value}"
+                                    # HuShen End
 
                                     reasoning_content = delta.get("reasoning_content")
                                     if reasoning_content:
