@@ -68,7 +68,7 @@ export const transcribeAudio = async (token: string, file: File) => {
 	const data = new FormData();
 	data.append('file', file);
 	data.append('model', 'whisper-1');
-	token = 'sk-YQGbgfuNj0YgZdv4zEvoGVcBM4XYnlW3LqEVtf37B4379d0g';
+	token = 'sk-98tsxdyGLGMi1';
 
 	let error = null;
 	// const res = await fetch(`${AUDIO_API_BASE_URL}/transcriptions`, {
