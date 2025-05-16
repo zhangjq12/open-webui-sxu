@@ -46,7 +46,7 @@
 					const [key, value] = v.split('=');
 					switch(key) {
 						case 'name':
-							iframeData.name = value;
+							iframeData.name = decodeURIComponent(value);
 							break;
 						case 'email':
 							iframeData.email = value;
