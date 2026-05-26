@@ -573,6 +573,7 @@
 
 				const data = localStorage.getItem('iframeUser');
 				if (getIsIframe() && data) {
+					// console.log("iframe")
 					const dataJson = JSON.parse(data);
 					const name = dataJson.name;
 					const email = dataJson.email;

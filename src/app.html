@@ -34,35 +34,128 @@
 		<script>
 			// On page load or when changing themes, best to add inline in `head` to avoid FOUC
 			(() => {
-				window.onmessage = (e) => {
-					localStorage.setItem('iframeUser', JSON.stringify(e.data));
+				// window.onmessage = (e) => {
+				// 	localStorage.setItem('iframeUser', JSON.stringify(e.data));
+				// 	localStorage.setItem('isIframe', 'true');
+				// }
+
+				// const iframeQueries = window.location.search.split('?')[1].split('&');
+				// const iframeData = {};
+				// for (let idx = 0; idx < iframeQueries.length; idx++) {
+				// 	const v = iframeQueries[idx]
+				// 	const [key, value] = v.split('=');
+				// 	switch(key) {
+				// 		case 'name':
+				// 			iframeData.name = decodeURIComponent(value);
+				// 			break;
+				// 		case 'email':
+				// 			iframeData.email = value;
+				// 			break;
+				// 		case 'password':
+				// 			iframeData.password = value;
+				// 			break;
+				// 		case 'iframe':
+				// 			if (value === 'true') localStorage.setItem('isIframe', value)
+				// 			break;
+				// 		default:
+				// 			break;
+				// 	}
+				// }
+				// localStorage.setItem('iframeUser', JSON.stringify(iframeData));
+
+				// //
+
+				// window.onmessage = (e) => {
+				// 	// console.log('received postMessage:', e.data);
+
+				// 	if (
+				// 		e.data &&
+				// 		typeof e.data === 'object' &&
+				// 		e.data.name &&
+				// 		e.data.email &&
+				// 		e.data.password
+				// 	) {
+				// 		localStorage.setItem('iframeUser', JSON.stringify(e.data));
+				// 		localStorage.setItem('isIframe', 'true');
+				// 	}
+				// };
+
+				// const search = window.location.search;
+
+				// if (search) {
+				// 	const iframeQueries = search.split('?')[1].split('&');
+				// 	const iframeData = {};
+
+				// 	for (let idx = 0; idx < iframeQueries.length; idx++) {
+				// 		const v = iframeQueries[idx];
+				// 		const [key, value] = v.split('=');
+
+				// 		switch (key) {
+				// 			case 'name':
+				// 				iframeData.name = decodeURIComponent(value || '');
+				// 				break;
+				// 			case 'email':
+				// 				iframeData.email = decodeURIComponent(value || '');
+				// 				break;
+				// 			case 'password':
+				// 				iframeData.password = decodeURIComponent(value || '');
+				// 				break;
+				// 			case 'iframe':
+				// 				if (value === 'true') {
+				// 					localStorage.setItem('isIframe', value);
+				// 				}
+				// 				break;
+				// 			default:
+				// 				break;
+				// 		}
+				// 	}
+
+				// 	// console.log('iframeData from url:', iframeData);
+
+				// 	if (iframeData.name && iframeData.email && iframeData.password) {
+				// 		localStorage.setItem('iframeUser', JSON.stringify(iframeData));
+				// 	}
+				// }
+
+				// // 
+
+				window.addEventListener('message', (e) => {
+					// console.log('received postMessage:', e.data);
+
+					if (
+						e.data &&
+						typeof e.data === 'object' &&
+						e.data.name &&
+						e.data.email &&
+						e.data.password
+					) {
+						localStorage.setItem('iframeUser', JSON.stringify({
+							name: e.data.name,
+							email: e.data.email,
+							password: e.data.password
+						}));
+						localStorage.setItem('isIframe', 'true');
+					}
+				});
+
+				const params = new URLSearchParams(window.location.search);
+
+				const iframeData = {
+					name: params.get('name') || '',
+					email: params.get('email') || '',
+					password: params.get('password') || ''
+				};
+
+				if (params.get('iframe') === 'true') {
 					localStorage.setItem('isIframe', 'true');
 				}
 
-				const iframeQueries = window.location.search.split('?')[1].split('&');
-				const iframeData = {};
-				for (let idx = 0; idx < iframeQueries.length; idx++) {
-					const v = iframeQueries[idx]
-					const [key, value] = v.split('=');
-					switch(key) {
-						case 'name':
-							iframeData.name = decodeURIComponent(value);
-							break;
-						case 'email':
-							iframeData.email = value;
-							break;
-						case 'password':
-							iframeData.password = value;
-							break;
-						case 'iframe':
-							if (value === 'true') localStorage.setItem('isIframe', value)
-							break;
-						default:
-							break;
-					}
-				}
-				localStorage.setItem('iframeUser', JSON.stringify(iframeData));
+				// console.log('iframeData from url:', iframeData);
 
+				if (iframeData.name && iframeData.email && iframeData.password) {
+					localStorage.setItem('iframeUser', JSON.stringify(iframeData));
+				}
+				// //
 
 				const metaThemeColorTag = document.querySelector('meta[name="theme-color"]');
 				const prefersDarkTheme = window.matchMedia('(prefers-color-scheme: dark)').matches;
